@@ -1,0 +1,1 @@
+//Aqui van las rutas (toma las funciones del controller)
