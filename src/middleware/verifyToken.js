@@ -2,11 +2,13 @@ const jwt = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {
     // Revisamos si el token viene en el header 
-    const token = req.header('auth-token');
+    const authHeader = req.header('Authorization');
     
-    if (!token) {
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return res.status(401).json({ msg: "Acceso denegado. Se requiere token." });
     }
+
+    const token = authHeader.split(' ')[1];
 
     try {
         // Validamos el token 
@@ -14,6 +16,7 @@ module.exports = (req, res, next) => {
         req.user = verified;
         next();
     } catch (error) {
-        res.status(400).json({ msg: "Token no válido" });
+        res.status(401).json({ msg: "Token no válido" });
     }
 };
+
