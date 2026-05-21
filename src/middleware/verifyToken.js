@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {
-    // Revisamos si el token viene en el header 
     const authHeader = req.header('Authorization');
     
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -11,12 +10,12 @@ module.exports = (req, res, next) => {
     const token = authHeader.split(' ')[1];
 
     try {
-        // Validamos el token 
         const verified = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = verified;
-        next();
+        req.user = verified; 
+        return next();
     } catch (error) {
-        res.status(401).json({ msg: "Token no válido" });
+        return res.status(401).json({ msg: "Token no válido" });
     }
 };
+
 
