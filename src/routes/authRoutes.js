@@ -10,6 +10,12 @@ const Models = require('../models/user');
 //Ruta para el login
 router.post('/login', controller.login);
 
+router.post('/employees', verifyToken, verifyAdmin, controller.createEmployee);
+router.put('/employees/:id', verifyToken, verifyAdmin, controller.updateEmployee);
+router.delete('/employees/:id', verifyToken, verifyAdmin, controller.deleteEmployee);
+
+router.get('/employees/search', verifyToken, verifyAdmin, controller.getEmployees);
+
 // Rutas para el CRUD de empleados
 //Obtener empleados (con opción de búsqueda por nombre)
 router.get('/employees', controller.getEmployees);

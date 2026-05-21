@@ -1,7 +1,18 @@
 const API_URL = '/api/employees'; 
-
 const token = localStorage.getItem('token'); 
-const userRole = localStorage.getItem('userRole'); 
+
+const userRole = localStorage.getItem('userRole');
+
+
+if (userRole !== 'admin') {
+    const btnAdd = document.getElementById('btnAgregarEmpleado');
+    const inputSearch = document.getElementById('inputBuscarEmpleado');
+    const btnSearch = document.getElementById('btnBuscar');
+
+    if (btnAdd) btnAdd.style.display = 'none';
+    if (inputSearch) inputSearch.style.display = 'none';
+    if (btnSearch) btnSearch.style.display = 'none';
+}
 
 let editandoId = null;
 
@@ -15,7 +26,6 @@ const getHeaders = () => ({
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-
     configurarInterfazPorRol();
     ejecutarBusquedaInicial();
     configurarEnvioFormulario();
@@ -81,21 +91,24 @@ function renderizarTablaEmpleados(empleados) {
     empleados.forEach(emp => {
         const tr = document.createElement('tr');
 
-        const botonEdicionHTML = userRole === 'admin'
-            ? `<button onclick="prepararFormularioEdicion(${JSON.stringify(emp).replace(/"/g, '&quot;')})" class="btn-primary" style="padding: 2px 8px; cursor: pointer;">Editar</button>`
-            : `<span style="color: gray; font-style: italic;">Lectura</span>`;
+    // Validamos si es admin para meter AMBOS botones en el mismo bloque HTML
+    const botonesAccionesHTML = userRole === 'admin'
+        ? `<button onclick="prepararFormularioEdicion(${JSON.stringify(emp).replace(/"/g, '&quot;')})" class="btn-prim">Editar</button>
+           <button onclick="deleteEmployee(${emp.idEmployee})" class="btn-danger" style="background-color: #dc3545; color: white; border: none; padding: 6px 12px; border-radius: 4px; margin-left: 5px; cursor: pointer;">Eliminar</button>`
+        : `<span style="color: gray; font-style: italic;">Lectura</span>`;
 
-        tr.innerHTML = `
-            <td>${emp.username}</td>
-            <td>${emp.lastname}</td>
-            <td>${emp.phone}</td>
-            <td>${emp.email}</td>
-            <td>${emp.address}</td>
-            <td>${emp.rol}</td>
-            <td>${botonEdicionHTML}</td>
-        `;
-        tbody.appendChild(tr);
-    });
+    tr.innerHTML = `
+        <td>${emp.username}</td>
+        <td>${emp.lastname}</td>
+        <td>${emp.phone}</td>
+        <td>${emp.email}</td>
+        <td>${emp.address}</td>
+        <td>${emp.rol}</td>
+        <td>${botonesAccionesHTML}</td>
+    `;
+    
+    tbody.appendChild(tr);
+});
 }
 
 function openModal() {
@@ -182,4 +195,29 @@ function logout() {
     window.location.href = 'index.html';
 }
 
+async function deleteEmployee(id) {
+    if (!confirm("¿Estás seguro de que deseas eliminar a este empleado de la base de datos?")) {
+        return;
+    }
 
+    try {
+        const response = await fetch(`http://localhost:4000/api/employees/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            alert(data.msg || "Empleado eliminado con éxito");
+            location.reload();
+        } else {
+            alert(data.msg || "No se pudo eliminar al empleado");
+        }
+    } catch (error) {
+        console.error("Error al eliminar:", error);
+        alert("Ocurrió un error al conectar con el servidor");
+    }
+}
