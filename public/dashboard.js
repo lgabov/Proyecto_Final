@@ -1,6 +1,7 @@
 const API_URL = '/api/employees'; 
 
 const token = localStorage.getItem('token'); 
+const userRole = localStorage.getItem('userRole'); 
 
 let editandoId = null;
 
@@ -10,18 +11,31 @@ if (!token) {
 
 const getHeaders = () => ({
     'Content-Type': 'application/json',
-    'auth-token': token 
+    'Authorization': `Bearer ${token}` 
 });
 
 document.addEventListener('DOMContentLoaded', () => {
+
+    configurarInterfazPorRol();
     ejecutarBusquedaInicial();
     configurarEnvioFormulario();
 });
 
+function configurarInterfazPorRol() {
+    const btnAgregar = document.querySelector('.btn-success');
+    if (userRole !== 'admin') {
+        if (btnAgregar) btnAgregar.style.display = 'none'; 
+    }
+}
+
 async function ejecutarBusquedaInicial() {
     try {
-        const response = await fetch(`${API_URL}/empleados`, { headers: getHeaders() });
-        if (response.status === 401 || response.status === 400) { logout(); return; }
+        const response = await fetch(API_URL, { headers: getHeaders() });
+        if (response.status === 401 || response.status === 400) { 
+            logout(); 
+            return; 
+        }
+        
         const data = await response.json();
         renderizarTablaEmpleados(data);
     } catch (error) {
@@ -32,25 +46,27 @@ async function ejecutarBusquedaInicial() {
 async function buscarEmpleado() {
     const nombre = document.getElementById('searchInput').value.trim();
     
-    // Ahora construirá: /api/employees?name=Gabriel o /api/employees
     const url = nombre 
         ? `${API_URL}?name=${encodeURIComponent(nombre)}` 
         : API_URL;
 
     try {
+        console.log("Buscando en URL:", url);
         const response = await fetch(url, { headers: getHeaders() });
         
         if (!response.ok) {
-            throw new Error(`Error en el servidor. Código de estado: ${response.status}`);
+            throw new Error(`Error en el servidor: ${response.status}`);
         }
         
         const data = await response.json();
+        console.log(" Datos recibidos del buscador:", data);
         renderizarTablaEmpleados(data);
     } catch (error) {
-        console.error('DETALLE DEL ERROR EN LA PETICIÓN:', error);
-        alert(`Error al realizar la búsqueda: ${error.message}`);
+        console.error('Error en la petición de búsqueda:', error);
+        alert('Hubo un problema al procesar la búsqueda.');
     }
 }
+
 
 
 function renderizarTablaEmpleados(empleados) {
@@ -64,6 +80,11 @@ function renderizarTablaEmpleados(empleados) {
 
     empleados.forEach(emp => {
         const tr = document.createElement('tr');
+
+        const botonEdicionHTML = userRole === 'admin'
+            ? `<button onclick="prepararFormularioEdicion(${JSON.stringify(emp).replace(/"/g, '&quot;')})" class="btn-primary" style="padding: 2px 8px; cursor: pointer;">Editar</button>`
+            : `<span style="color: gray; font-style: italic;">Lectura</span>`;
+
         tr.innerHTML = `
             <td>${emp.username}</td>
             <td>${emp.lastname}</td>
@@ -71,15 +92,17 @@ function renderizarTablaEmpleados(empleados) {
             <td>${emp.email}</td>
             <td>${emp.address}</td>
             <td>${emp.rol}</td>
-            <td>
-                <button onclick="prepararFormularioEdicion(${JSON.stringify(emp).replace(/"/g, '&quot;')})" class="btn-primary" style="padding: 2px 8px; cursor: pointer;">Editar</button>
-            </td>
+            <td>${botonEdicionHTML}</td>
         `;
         tbody.appendChild(tr);
     });
 }
 
 function openModal() {
+    if (userRole !== 'admin') {
+        alert("Acceso denegado. Se requieren permisos de administrador.");
+        return;
+    }
     document.getElementById('employeeModal').style.display = 'block';
     document.getElementById('modalTitle').textContent = 'Nuevo Empleado';
     document.getElementById('employeeForm').reset();
@@ -97,7 +120,7 @@ function prepararFormularioEdicion(emp) {
     editandoId = emp.idEmployee; 
     
     document.getElementById('empUsername').value = emp.username;
-    document.getElementById('empPassword').value = emp.password; 
+    document.getElementById('empPassword').value = emp.password || ''; 
     document.getElementById('empLastname').value = emp.lastname;
     document.getElementById('empPhone').value = emp.phone;
     document.getElementById('empEmail').value = emp.email;
@@ -111,11 +134,6 @@ function configurarEnvioFormulario() {
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        if (!editandoId) {
-            alert("Acción no configurada (El modo creación está pausado).");
-            return;
-        }
-
         const datosFormulario = {
             username: document.getElementById('empUsername').value.trim(),
             password: document.getElementById('empPassword').value,
@@ -127,28 +145,40 @@ function configurarEnvioFormulario() {
         };
 
         try {
-            const response = await fetch(`${API_URL}/${editandoId}`, {
-                method: 'PUT',
+            let url = API_URL;
+            let method = 'POST'; 
+
+            if (editandoId) {
+                url = `${API_URL}/${editandoId}`;
+                method = 'PUT'; 
+            }
+
+            const response = await fetch(url, {
+                method: method,
                 headers: getHeaders(),
                 body: JSON.stringify(datosFormulario)
             });
 
-            if (!response.ok) throw new Error('Error al actualizar');
-
             const resultado = await response.json();
-            alert(resultado.msg); 
+
+            if (!response.ok) {
+                throw new Error(resultado.msg || 'Hubo un problema al procesar la solicitud');
+            }
+
+            alert(resultado.msg || 'Operación realizada con éxito'); 
             closeModal();
             ejecutarBusquedaInicial(); 
             
         } catch (error) {
             console.error(error);
-            alert('Hubo un problema al guardar los cambios');
+            alert(error.message);
         }
     });
 }
 
 function logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('userRole');
     window.location.href = 'index.html';
 }
 

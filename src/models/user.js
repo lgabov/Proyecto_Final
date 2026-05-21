@@ -17,12 +17,12 @@ const Models = {
         return rows;
     },
     createEmployee: async (data) => {
-        const { username, password, lastname, email, address, rol } = data;
-        return await db.execute('INSERT INTO empleados ( username, password, lastname, email, address, rol) VALUES (?, ?, ?, ?, ?, ?, ?)', [username, password, lastname, email, address, rol]);
+        const { username, password, phone, lastname, email, address, rol } = data;
+        return await db.execute('INSERT INTO empleados ( username, password, phone, lastname, email, address, rol) VALUES (?, ?, ?, ?, ?, ?, ?)', [username, password, phone, lastname, email, address, rol]);
     },
     updateEmployee: async (id, data) => {
-        const { username, password, lastname, email, address, rol } = data;
-        return await db.execute('UPDATE empleados SET username = ?, password = ?, lastname = ?, email = ?, address = ?, rol = ? WHERE idEmployee = ?', [username, password, lastname, email, address, rol,id]);
+        const { username, password, phone, lastname, email, address, rol } = data;
+        return await db.execute('UPDATE empleados SET username = ?, password = ?, phone = ?, lastname = ?, email = ?, address = ?, rol = ? WHERE idEmployee = ?', [username, password, phone, lastname, email, address, rol, id]);
     },
     deleteEmployee: async (id) => {
         return await db.execute('DELETE FROM empleados WHERE idEmployee = ?', [id]);

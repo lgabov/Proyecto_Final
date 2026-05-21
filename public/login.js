@@ -19,12 +19,23 @@ document.getElementById('formLogin').addEventListener('submit', async (e) => {
         const data = await response.json();
 
         if (response.ok) {
-            // Guardamos el token en el navegador
             localStorage.setItem('token', data.token);
             
-            alert('¡Login exitoso!');
+            try {
+                const base64Url = data.token.split('.');
+                const base64 = base64Url[1].replace(/-/g, '+').replace(/_/g, '/');
+
+                const payloadDecodificado = JSON.parse(window.atob(base64));
+
+                localStorage.setItem('userRole', payloadDecodificado.rol || 'user');
+                localStorage.setItem('username', payloadDecodificado.username || usernameInput);
+            } catch (e) {
+                console.error("Error al extraer el rol del token:", e);
+                localStorage.setItem('userRole', 'user'); 
+            }
             
-            // Redirigimos a la pantalla de empleados
+            alert('¡Login exitoso!');
+
             window.location.href = '/dashboard.html'; 
         } else {
             alert(data.msg || 'Error al iniciar sesión');
@@ -34,4 +45,5 @@ document.getElementById('formLogin').addEventListener('submit', async (e) => {
         alert('No se pudo conectar con el servidor');
     }
 });
+
 
