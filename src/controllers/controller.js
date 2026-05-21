@@ -18,7 +18,7 @@ exports.login = async (req, res) => {
             rol: user.rol || 'user' 
         };
 
-        const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '8h' });
+        const token = jwt.sign(payload, process.env.JWT_SECRET || 'clave', { expiresIn: '8h' });
         
         return res.json({ token, msg: "Login exitoso" });
 
