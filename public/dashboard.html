@@ -9,6 +9,9 @@
 <body>
 
 <header>
+    <div class="user-info-header">
+        <img src="https://cdn-icons-png.flaticon.com/512/912/912318.png" alt="Recursos Humanos" class="mini-avatar">
+    </div>
     <h1>Taller Node.js S.A. de C.V.</h1>
     <div>
         <span id="adminName">Admin</span>
@@ -39,17 +42,15 @@
             </tr>
         </thead>
         <tbody id="employeeTableBody">
-            <!-- Los datos se inyectan dinámicamente desde el JS -->
         </tbody>
     </table>
 </div>
 
-<!-- Modal para Agregar/Editar -->
 <div id="employeeModal" class="modal">
     <div class="modal-content">
         <h2 id="modalTitle">Nuevo Empleado</h2>
         <form id="employeeForm">
-            <!-- Input oculto indispensable para no perder el password original al actualizar -->
+
             <input type="hidden" id="empPassword">
 
             <div class="form-group">
