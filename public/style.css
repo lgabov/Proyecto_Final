@@ -1,11 +1,11 @@
 :root {
-    --bg-dark: #0f172a;           
+    --bg-dark: #000000;           
     --bg-gradient: #1e293b;      
-    --accent: #10b981;            
-    --accent-hover: #059669;      
-    --text-main: #1e293b;        
-    --text-muted: #64748b;      
-    --white: #ffffff;
+    --accent: #4b638a;            
+    --accent-hover: #23302c;      
+    --text-main: #000000;         
+    --text-muted: #000000;        
+    --white: #789ef6;
     --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
@@ -96,7 +96,7 @@ input[type="password"] {
 input:focus {
     outline: none;
     border-color: var(--accent);
-    background-color: var(--white);
+    background-color: white;
     box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
 }
 
@@ -104,7 +104,6 @@ button {
     width: 100%;
     padding: 14px;
     background-color: var(--accent);
-    color: var(--white);
     border: none;
     border-radius: 12px;
     font-size: 1rem;
@@ -112,6 +111,7 @@ button {
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     margin-top: 0.5rem;
+    color: black;
 }
 
 button:hover {
