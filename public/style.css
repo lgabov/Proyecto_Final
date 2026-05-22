@@ -1,82 +1,129 @@
-/* 1. Reset y Estilo General */
+/* 1. Variables de Color y Reset */
+:root {
+    --bg-dark: #0f172a;           /* Fondo azul noche */
+    --bg-gradient: #1e293b;       /* Azul pizarra para degradado */
+    --accent: #10b981;            /* Verde esmeralda para botones y bordes */
+    --accent-hover: #059669;      /* Verde más oscuro para hover */
+    --text-main: #1e293b;         /* Texto de títulos */
+    --text-muted: #64748b;        /* Texto de etiquetas */
+    --white: #ffffff;
+    --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    background-color: #f4f7f9; /* Color de fondo suave */
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    background: linear-gradient(135deg, var(--bg-gradient) 0%, var(--bg-dark) 100%);
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh; /* Centra verticalmente en toda la pantalla */
+    height: 100vh;
+    color: var(--text-main);
 }
 
-/* 2. El Contenedor Principal (Caja blanca) */
+/* 2. Contenedor Principal con Animación */
 .contenedor {
-    background: #ffffff;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    background: var(--white);
+    padding: 2.5rem;
+    border-radius: 20px;
+    box-shadow: var(--shadow);
     width: 100%;
     max-width: 400px;
     text-align: center;
+    animation: slideUp 0.6s ease-out;
 }
 
-/* 3. Título */
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.avatar-container {
+    width: 90px;
+    height: 90px;
+    background-color: #f8fafc;
+    border-radius: 50%;
+    margin: 0 auto 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 3px solid var(--accent);
+    overflow: hidden;
+}
+
+.avatar {
+    width: 65%;
+    height: auto;
+    object-fit: cover;
+}
+
 h2 {
-    margin-top: 0;
-    color: #333;
-    font-size: 1.8rem;
-    margin-bottom: 1.5rem;
+    margin: 0 0 0.5rem 0;
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--text-main);
 }
 
-/* 4. Etiquetas (Labels) */
+p.subtitle {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+}
+
+
 label {
     display: block;
     text-align: left;
-    margin-bottom: 5px;
+    margin-bottom: 0.5rem;
     font-weight: 600;
-    color: #555;
-    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
 }
 
-/* 5. Campos de Entrada (Inputs) */
 input[type="text"],
 input[type="password"] {
     width: 100%;
-    padding: 12px;
-    margin-bottom: 5px; /* Quitamos el espacio extra para controlarlo con CSS */
-    border: 1px solid #ccd1d9;
-    border-radius: 8px;
-    box-sizing: border-box; /* Evita que el padding ensanche el input */
+    padding: 14px;
+    margin-bottom: 1.5rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    box-sizing: border-box;
     font-size: 1rem;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
+    background-color: #fcfcfc;
 }
 
 input:focus {
     outline: none;
-    border-color: #4a90e2;
-    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+    border-color: var(--accent);
+    background-color: var(--white);
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
 }
 
-/* 6. Botón de Envío */
+
 button {
     width: 100%;
-    padding: 12px;
-    background-color: #4a90e2;
-    color: white;
+    padding: 14px;
+    background-color: var(--accent);
+    color: var(--white);
     border: none;
-    border-radius: 8px;
+    border-radius: 12px;
     font-size: 1rem;
-    font-weight: bold;
+    font-weight: 700;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.1s ease;
-    margin-top: 10px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-top: 0.5rem;
 }
 
 button:hover {
-    background-color: #357abd;
+    background-color: var(--accent-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
 }
 
 button:active {
-    transform: scale(0.98); /* Efecto de pulsación */
+    transform: scale(0.98);
 }
