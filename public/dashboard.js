@@ -1,8 +1,21 @@
 const API_URL = '/api/employees'; 
 const token = localStorage.getItem('token'); 
-
 const userRole = localStorage.getItem('userRole');
 
+document.addEventListener('DOMContentLoaded', () => {
+
+    const userRole = localStorage.getItem('userRole'); 
+
+    const adminNameElement = document.getElementById('adminName');
+
+    if (adminNameElement) {
+        if (userRole === 'admin') {
+            adminNameElement.textContent = 'Administrador';
+        } else {
+            adminNameElement.textContent = 'Usuario';
+        }
+    }
+});
 
 if (userRole !== 'admin') {
     const btnAdd = document.getElementById('btnAgregarEmpleado');
@@ -200,32 +213,24 @@ async function deleteEmployee(id) {
         return;
     }
 
-    const PORT = 3000;
-    const DB_HOST = 'localhost';
-
     try {
-        const response = await fetch(`http://${DB_HOST}:${PORT}/api/employees/${id}`, {
+        const response = await fetch(`http://localhost:4000/api/employees/${id}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
         });
 
-        let data = {};
-        const contentType = response.headers.get("content-type");
-        if (contentType && contentType.includes("application/json")) {
-            data = await response.json();
-        }
+        const data = await response.json();
 
         if (response.ok) {
             alert(data.msg || "Empleado eliminado con éxito");
             location.reload();
         } else {
-            alert(data.msg || `Error ${response.status}: No se pudo eliminar al empleado`);
+            alert(data.msg || "No se pudo eliminar al empleado");
         }
     } catch (error) {
-
-        console.error("Error detallado al eliminar:", error);
-        alert("Ocurrió un error al conectar con el servidor. Revisa la consola.");
+        console.error("Error al eliminar:", error);
+        alert("Ocurrió un error al conectar con el servidor");
     }
 }
