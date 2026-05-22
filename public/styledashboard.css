@@ -1,10 +1,10 @@
 :root {
-            --primary-color: #2c3e50;
+            --primary-color: #2b4157;
             --secondary-color: #34495e;
             --accent-color: #3498db;
             --success-color: #27ae60;
             --danger-color: #e74c3c;
-            --light-bg: #f4f7f6;
+            --light-bg: #0f172a;
             --white: #ffffff;
         }
 
@@ -108,3 +108,35 @@
 
         .form-group { margin-bottom: 1rem; }
         .form-group label { display: block; margin-bottom: 0.3rem; font-weight: bold; }
+
+        /* Contenedor del Rol e Imagen (Esquina superior izquierda) */
+.user-info-header {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* Espacio entre el texto y la imagen */
+}
+
+/* Estilo para el texto del Rol (Administrador/Usuario) */
+#role-display {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    background-color: rgba(16, 185, 129, 0.15); /* Fondo verde traslúcido */
+    color: #10b981; /* Verde esmeralda idéntico al login */
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    letter-spacing: 0.05em;
+}
+
+/* Estilo para la imagen circular de Recursos Humanos */
+.mini-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%; /* Hace la imagen circular */
+    border: 2px solid #10b981; /* Borde verde esmeralda */
+    background-color: #ffffff; /* Fondo blanco por si la imagen es PNG transparente */
+    object-fit: cover; /* Evita que la imagen se deforme */
+    padding: 2px; /* Espacio entre el borde y la foto */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
