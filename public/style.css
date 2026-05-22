@@ -1,11 +1,10 @@
-/* 1. Variables de Color y Reset */
 :root {
-    --bg-dark: #0f172a;           /* Fondo azul noche */
-    --bg-gradient: #1e293b;       /* Azul pizarra para degradado */
-    --accent: #10b981;            /* Verde esmeralda para botones y bordes */
-    --accent-hover: #059669;      /* Verde más oscuro para hover */
-    --text-main: #1e293b;         /* Texto de títulos */
-    --text-muted: #64748b;        /* Texto de etiquetas */
+    --bg-dark: #0f172a;           
+    --bg-gradient: #1e293b;      
+    --accent: #10b981;            
+    --accent-hover: #059669;      
+    --text-main: #1e293b;        
+    --text-muted: #64748b;      
     --white: #ffffff;
     --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
@@ -22,7 +21,6 @@ body {
     color: var(--text-main);
 }
 
-/* 2. Contenedor Principal con Animación */
 .contenedor {
     background: var(--white);
     padding: 2.5rem;
@@ -71,7 +69,6 @@ p.subtitle {
     margin-bottom: 2rem;
 }
 
-
 label {
     display: block;
     text-align: left;
@@ -102,7 +99,6 @@ input:focus {
     background-color: var(--white);
     box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
 }
-
 
 button {
     width: 100%;
